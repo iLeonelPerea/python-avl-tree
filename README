@@ -1,0 +1,124 @@
+# README
+
+This repository contains Python implementations of various common data structures, including:
+
+- Queue: a First-In, First-Out (FIFO) data structure that supports enqueue and dequeue operations.
+- Stack: a Last-In, First-Out (LIFO) data structure that supports push and pop operations.
+- Binary Search Tree (BST): a data structure in which each node can have up to two children, with the property that the value of each node in the left subtree is less than or equal to the node's value, and the value of each node in the right subtree is greater than the node's value.
+- AVL Tree: a variant of the binary search tree that guarantees the height difference between the left and right subtrees of each node to be at most 1, providing automatic balance.
+
+## Usage
+
+You can use these data structures in your own Python code by importing the corresponding classes from the source files.
+
+Example usage of the Queue data structure:
+
+```python
+from data_structures import Queue
+
+# Create a queue
+queue = Queue()
+
+# Enqueue elements
+queue.enqueue(10)
+queue.enqueue(20)
+queue.enqueue(30)
+
+# Dequeue elements
+item = queue.dequeue()
+print(item)  # Output: 10
+
+# Check if the queue is empty
+print(queue.is_empty())  # Output: False
+```
+
+Example usage of the Stack data structure
+
+```python
+from data_structures import Stack
+
+# Create a stack
+stack = Stack()
+
+# Push elements
+stack.push(10)
+stack.push(20)
+stack.push(30)
+
+# Pop elements
+item = stack.pop()
+print(item)  # Output: 30
+
+# Get the top item from the stack
+top_item = stack.top()
+print(top_item)  # Output: 20
+
+# Check if the stack is empty
+print(stack.is_empty())  # Output: False
+```
+
+Example usage of the Binary Search Tree (BST) data structure:
+
+```python
+from data_structures import BST
+
+# Create a binary search tree
+tree = BST([10, 5, 15, 7, 12, 20])
+
+# Check if the tree is a valid BST
+print(tree.is_valid_bst())  # Output: True
+
+# Add a new value to the tree
+tree.add(8)
+
+# Remove a value from the tree
+tree.remove(7)
+
+# Get the root of the tree
+root = tree.get_root()
+print(root)  # Output: BST Node: 10
+
+# Perform a pre-order traversal of the tree
+print(tree)  # Output: BST pre-order { 10, 5, 8, 15, 12, 20 }
+```
+
+Example usage of the AVL Tree data structure:
+
+```python
+from data_structures import AVL
+
+# Create an AVL tree
+tree = AVL([10, 5, 15, 7, 12, 20])
+
+# Check if the tree is a valid AVL tree
+print(tree.is_valid_avl())  # Output: True
+
+# Add a new value to the tree
+tree.add(8)
+
+# Remove a value from the tree
+tree.remove(7)
+
+# Get the root of the tree
+root = tree.get_root()
+print(root)  # Output: AVL Node: 10
+
+# Perform a pre-order traversal of the tree
+print(tree)  # Output: AVL pre-order { 10, 8, 5, 15, 12, 20 }
+```
+
+Example usage of the test assets:
+
+```bash
+   python test.py
+```
+
+You can find more usage examples for the other data structures in their corresponding source files.
+
+## Contributions
+
+Contributions to this repository are welcome. If you want to improve an existing implementation, add new features, or fix issues, feel free to open a new pull request. Make sure to follow coding best practices and provide a clear description of the changes you made.
+
+## License
+
+This repository is licensed under the MIT License. If you use this code, please include the appropriate attribution.

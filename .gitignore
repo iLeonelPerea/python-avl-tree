@@ -1,0 +1,43 @@
+# Archivos de configuración
+*.ini
+*.cfg
+*.conf
+
+# Archivos compilados
+*.pyc
+*.pyo
+__pycache__/
+
+# Entornos virtuales
+venv/
+env/
+ENV/
+
+# Archivos de registro y salida
+*.log
+*.txt
+
+# Archivos de respaldo y temporales
+*~
+.*.swp
+*.bak
+*.tmp
+
+# Archivos de Mac
+.DS_Store
+
+# Archivos generados por IDEs y editores de texto comunes
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Dependencias y entornos específicos
+/.venv
+/pip-selfcheck.json
+
+# Carpeta de resultados de pruebas
+/.pytest_cache/
+
+# Carpeta de cobertura de pruebas
+/coverage/
