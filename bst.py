@@ -1,45 +1,60 @@
-import random
-from queue_ import Queue
-from stack import Stack
+# Name: Ivan Ruiz
+# OSU Email: ruiziv@oregonstate.edu
+# Course: CS261 - Data Structures
+# Assignment: 4
+# Due Date: 5/22/2023
+# Description: This code creates a BST with various methods in addition to add and remove.
 
-# BSTNode is a node in the Binary Search Tree.
+
+import random
+from queue_and_stack import Queue, Stack
+
+
 class BSTNode:
+    """
+    Binary Search Tree Node class
+    DO NOT CHANGE THIS CLASS IN ANY WAY
+    """
+
     def __init__(self, value: object) -> None:
         """
-        Initialize a BST Node.
-
-        :param value: The value to be stored in the node.
+        Initialize a new BST node
+        DO NOT CHANGE THIS METHOD IN ANY WAY
         """
-        self.value = value
-        self.left = None
-        self.right = None
+        self.value = value   # to store node's data
+        self.left = None     # pointer to root of left subtree
+        self.right = None    # pointer to root of right subtree
 
     def __str__(self) -> str:
         """
-        String representation of a BST Node.
-
-        :return: A string representation of the BST Node.
+        Override string method
+        DO NOT CHANGE THIS METHOD IN ANY WAY
         """
         return 'BST Node: {}'.format(self.value)
 
-# BST is a Binary Search Tree.
+
 class BST:
+    """
+    Binary Search Tree class
+    """
+
     def __init__(self, start_tree=None) -> None:
         """
-        Initialize a BST.
-
-        :param start_tree: A starting tree.
+        Initialize new Binary Search Tree
+        DO NOT CHANGE THIS METHOD IN ANY WAY
         """
         self._root = None
-        if start_tree is not None:  # If a starting tree is provided
-            for value in start_tree:  # For each value in the starting tree
-                self.add(value)  # Add the value to the BST
+
+        # populate BST with initial values (if provided)
+        # before using this feature, implement add() method
+        if start_tree is not None:
+            for value in start_tree:
+                self.add(value)
 
     def __str__(self) -> str:
         """
-        String representation of the BST.
-
-        :return: A string representation of the BST.
+        Override string method; display in pre-order
+        DO NOT CHANGE THIS METHOD IN ANY WAY
         """
         values = []
         self._str_helper(self._root, values)
@@ -47,30 +62,33 @@ class BST:
 
     def _str_helper(self, node: BSTNode, values: []) -> None:
         """
-        A helper function to get a string representation of the BST.
-
-        :param node: The current node.
-        :param values: The list of values in the BST.
+        Helper method for __str__. Does pre-order tree traversal
+        DO NOT CHANGE THIS METHOD IN ANY WAY
         """
-        if not node:  # If node is None, return
+        if not node:
             return
-        values.append(str(node.value))  # Append the value of the current node
-        self._str_helper(node.left, values)  # Traverse the left subtree
-        self._str_helper(node.right, values)  # Traverse the right subtree
+        values.append(str(node.value))
+        self._str_helper(node.left, values)
+        self._str_helper(node.right, values)
 
     def get_root(self) -> BSTNode:
         """
-        Get the root of the BST.
-
-        :return: The root of the BST.
+        Return root of tree, or None if empty
+        DO NOT CHANGE THIS METHOD IN ANY WAY
         """
         return self._root
 
     def is_valid_bst(self) -> bool:
         """
-        Check if the BST is valid.
+        Perform pre-order traversal of the tree.
+        Return False if nodes don't adhere to the bst ordering property.
 
-        :return: True if the BST is valid, False otherwise.
+        This is intended to be a troubleshooting method to help find any
+        inconsistencies in the tree after the add() or remove() operations.
+        A return of True from this method doesn't guarantee that your tree
+        is the 'correct' result, just that it satisfies bst ordering.
+
+        DO NOT CHANGE THIS METHOD IN ANY WAY
         """
         stack = Stack()
         stack.push(self._root)
@@ -85,185 +103,246 @@ class BST:
                 stack.push(node.left)
         return True
 
+    # ------------------------------------------------------------------ #
+
     def add(self, value: object) -> None:
         """
-        Add an element to the BST.
+        Add a new node to the Binary Search Tree (BST) with the provided value.
 
-        :param value: The value to be added.
+        :param value: number we are adding to BST
+
+        :return None
         """
-        new_node = BSTNode(value)  # Create a new node
-        node = self._root  # Start at the root
-        if self._root is None:  # If the tree is empty
-            self._root = new_node  # Set the root to the new node
+        # Create a new node
+        new_node = BSTNode(value)
+        node = self._root
+
+        # If the tree is empty, the root becomes the new node
+        if self._root is None:
+            self._root = new_node
             return
-        while node:
-            if value < node.value:  # If value is less than current node's value
-                if node.left is None:  # And current node has no left child
-                    node.left = new_node  # Insert the new node as the left child
+
+        # Find the right place to insert the new node
+        while node is not None:
+            # If the new value is less than the current node
+            if value < node.value:
+                if node.left is None:
+                    node.left = new_node
                     return
                 else:
-                    node = node.left  # Move to the left child
-            elif value >= node.value:  # If value is greater or equal to current node's value
-                if node.right is None:  # And current node has no right child
-                    node.right = new_node  # Insert the new node as the right child
+                    node = node.left
+
+            # If the new value is greater than or equal to the current node
+            elif value >= node.value:
+                if node.right is None:
+                    node.right = new_node
                     return
                 else:
-                    node = node.right  # Move to the right child
+                    node = node.right
 
     def remove(self, value: object) -> bool:
         """
-        Remove an element from the BST.
+        Remove a node from the BST with the provided value.
 
-        :param value: The value to be removed.
-        :return: True if the node is removed, False otherwise.
+        :param value: object of value that will be removed
+
+        :returns: True if the node was found and removed, False otherwise
         """
-        # Find the node to be removed and its parent node
+        # Start from the root node
         node = self._root
         parent_node = None
+
+        # Find the node to be removed
         while node is not None:
-            if node.value == value:  # The node to be removed is found
+            if node.value == value:
                 break
-            elif value < node.value:  # Move to the left subtree
+            # Go to the left subtree
+            elif value < node.value:
                 parent_node = node
                 node = node.left
-            else:  # Move to the right subtree
+            # Go to the right subtree
+            else:
                 parent_node = node
                 node = node.right
 
-        # The node to be removed is not found
         if node is None:
             return False
 
-        # Case 1: The node is a leaf node (no children)
+        # No child case
         if node.right is None and node.left is None:
-            if parent_node is None:  # The node is the root
+            if parent_node is None:
                 self._root = None
-            elif parent_node.left == node:  # The node is a left child
+            elif parent_node.left == node:
                 parent_node.left = None
-            else:  # The node is a right child
+            else:
                 parent_node.right = None
 
-        # Case 2: The node has one child
+        # One child case
         elif node.left is None or node.right is None:
-            # Get the child node
-            child_node = node.left if node.left is not None else node.right
+            if parent_node is None:
+                if node.left is not None:
+                    self._root = node.left
+                else:
+                    self._root = node.right
+            elif parent_node.left == node:
+                if node.left is not None:
+                    parent_node.left = node.left
+                else:
+                    parent_node.left = node.right
+            else:
+                if node.left is not None:
+                    parent_node.right = node.left
+                else:
+                    parent_node.right = node.right
 
-            if parent_node is None:  # The node is the root
-                self._root = child_node
-            elif parent_node.left == node:  # The node is a left child
-                parent_node.left = child_node
-            else:  # The node is a right child
-                parent_node.right = child_node
-
-        # Case 3: The node has two children
+        # Two children case, find the in-order successor and
+        # replace it with the node to be removed
         else:
-            # Find the in-order successor (the smallest node in the right subtree)
+            # Find the in-order successor (the leftmost node in the right subtree)
             successor = node.right
             successor_parent = node
             while successor.left is not None:
                 successor_parent = successor
                 successor = successor.left
 
-            # Replace the node with the successor
+            # Replace the node to be removed with the in-order successor
             successor.left = node.left
             if successor is not node.right:
                 successor_parent.left = successor.right
                 successor.right = node.right
 
-            if parent_node is None:  # The node is the root
+            # Update the parent nodes child reference
+            if parent_node is None:
                 self._root = successor
-            elif parent_node.left == node:  # The node is a left child
+            elif parent_node.left == node:
                 parent_node.left = successor
-            else:  # The node is a right child
+            else:
                 parent_node.right = successor
-
         return True
 
     def contains(self, value: object) -> bool:
         """
-        Check if the BST contains a value.
-        :param value: The value to check.
-        :return: True if the BST contains the value, False otherwise.
+        Check if the BST contains a given value.
+
+        :param value: object of the value one is searching for
+
+        :returns found: bool, True or False if found
         """
         node = self._root
         found = False
+
+        # Traverse the tree, breaking the loop if the value is found
         while node is not None:
             if node.value == value:
                 found = True
                 break
+            # Navigate left
             elif value < node.value:
                 node = node.left
+            # Navigate right
             else:
                 node = node.right
         return found
 
+
     def inorder_traversal(self) -> Queue:
         """
-        Execute an in-order traversal of the BST.
+        Inorder traversal of the BST, returning the values in a queue.
 
-        :return: A queue of nodes in the order they were traversed.
+        :param None:
+
+        :returns inorder_queue: A Queue
         """
-        node = self._root  # Start at the root
-        inorder_queue = Queue()  # Create an empty queue
-        in_stack = Stack()  # Create an empty stack
+        node = self._root
+        inorder_queue = Queue()
+        in_stack = Stack()
 
-        # While there are still unvisited nodes
+        # Continue until all nodes are visited
         while node is not None or in_stack.is_empty() is not True:
-            # Go to the left most node of the current node
+
+            # Move to the leftmost node, pushing each node onto the stack
             while node is not None:
                 in_stack.push(node)
                 node = node.left
 
-            # Backtrack from the empty subtree and visit the node at the top of the stack
+            # If there are unvisited nodes, visit the next one
             if in_stack.is_empty() is not True:
                 node = in_stack.pop()
-                inorder_queue.enqueue(node.value)  # Add the node to the queue
-                node = node.right  # Visit the right subtree
+                inorder_queue.enqueue(node.value)
+                node = node.right
 
         return inorder_queue
 
     def find_min(self) -> object:
         """
-        Find the minimum value in the BST.
+        This function returns the minimum value in the Binary Search Tree (BST).
 
-        :return: The minimum value in the BST. Returns None if the BST is empty.
+        :param None:
+
+        :returns minimum: object
         """
+        # If the tree is empty, there's no minimum value
         if self.is_empty():
             return None
+        else:
+            # Perform an in-order traversal
+            in_order_que = self.inorder_traversal()
 
-        node = self._root  # Start at the root
-        # Go to the left most node (minimum value in a BST)
-        while node.left is not None:
-            node = node.left
-        return node.value
+            # The first dequeued element from in_order_que is the minimum value
+            minimum = in_order_que.dequeue()
+            return minimum
 
     def find_max(self) -> object:
         """
-        Find the maximum value in the BST.
+        This function returns the maximum value in the Binary Search Tree (BST).
 
-        :return: The maximum value in the BST. Returns None if the BST is empty.
+        :param None:
+
+        returns max_val: object
         """
+        # If the tree is empty, there's no maximum value
         if self.is_empty():
             return None
+        else:
+            # If the tree is not empty, perform an in-order traversal
+            # to give a queue of values in ascending order
+            in_order_que = self.inorder_traversal()
 
-        node = self._root  # Start at the root
-        # Go to the right most node (maximum value in a BST)
-        while node.right is not None:
-            node = node.right
-        return node.value
+            # Push the dequeued elements from in_order_que into the stack
+            max_stack = Stack()
+            while not in_order_que.is_empty():
+                number = in_order_que.dequeue()
+                max_stack.push(number)
+
+            # The top of the stack contains the maximum value
+            max_val = max_stack.pop()
+            return max_val
 
     def is_empty(self) -> bool:
         """
-        Check if the BST is empty.
-        :return: True if the BST is empty, False otherwise.
+        Checks if the BST is empty
+
+        :receives None:
+
+        :returns True or False
         """
-        return self._root is None
+        if self._root is None:
+            return True
+        else:
+            return False
 
     def make_empty(self) -> None:
         """
-        Empty the BST.
+        Will make the bst empty
+
+        :param None:
+
+        :returns None:
         """
         self._root = None
+
+
+# ------------------- BASIC TESTING -----------------------------------------
 
 if __name__ == '__main__':
 
